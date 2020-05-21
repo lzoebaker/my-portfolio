@@ -5,14 +5,23 @@
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Reenie+Beanie&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <div class="overlay">
+      <div id="content">
+        <h1>Hi! I'm Zoe.</h1>
+        <img src="images/zoebakercircle.png" alt="Picture of Zoe Baker" class="profile">
+        <h2> About Me </h2>
+        <p>This summer, I am working as a STEP intern at Google. I just finished my sophomore year at Colorado School of Mines in Golden, 
+          CO, a small town nestled in the Colorado foothills. 
+          At Mines, I am a double major in Computer Science and Computational and Applied Math. I also run on the varsity cross country and 
+          track team, and participate in undergraduate research in the field of Machine Learning. I am so excited for this summer and the 
+          opportunity to work at Google! </p>
+        <h2>Click for a fun fact!</h2>
+        <button onclick="displayFunFact()" class="factbutton">Fact</button>
+        <div id="fact-container" class="fact-text"></div>
+      </div>
     </div>
   </body>
 </html>

@@ -7,3 +7,61 @@
 #greeting-container {
   margin-top: 20px;
 }
+
+h1 {
+    font-size: 70px;
+    color: white;
+    font-family: 'Reenie Beanie', cursive;
+}
+
+h2 {
+    font-size: 50px;
+    color: white;
+    font-family: 'Reenie Beanie', cursive;
+}
+
+body {
+    text-align: center;
+    background: url("images/background.jpg");
+    background-size: cover;
+}
+
+p {
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+}
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    margin: 0px;
+    padding: 0px;
+}
+
+.profile {
+    height: 300px;
+    width: 300px;
+    border: 10px solid white;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.factbutton {
+    background-color: grey;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    color: white;
+    border-radius: 12px;
+    padding: 15px 32px;
+    text-align: center;
+}
+
+.fact-text {
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+}
