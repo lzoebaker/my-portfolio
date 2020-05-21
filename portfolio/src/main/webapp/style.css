@@ -20,6 +20,11 @@ h2 {
     font-family: 'Reenie Beanie', cursive;
 }
 
+.text-link {
+    color: white;
+    text-decoration: underline;
+}
+
 body {
     text-align: center;
     background: url("images/background.jpg");
@@ -64,4 +69,13 @@ p {
     color: white;
     font-family: 'Open Sans', sans-serif;
     font-size: 20px;
+}
+.icon{
+    width: 50px;
+}
+.social-icons {
+    vertical-align: middle;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
