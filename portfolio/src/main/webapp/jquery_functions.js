@@ -1,3 +1,7 @@
+/*
+* Cycles between  different background images, triggered by mouse click
+*/
+
 let img_arr = new Array(5);
 img_arr = ["../images/mountbierstadt.jpg", 
            "../images/mountyale.jpg",
