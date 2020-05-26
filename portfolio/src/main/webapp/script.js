@@ -19,7 +19,7 @@ function displayFunFact(){
   const facts =
       ['I was born in Weehawken, New Jersey, and lived on a houseboat on the Hudson river!', 'I love the outdoors. My hobbies include trail running, hiking, skiing, camping, and climbing 14ers!', 'I like to wake up with the sun, and am a morning person. I love the quietness of 6am.', 'I really enjoy reading. Urban Fantasy, like the Dresden Files, are some of my favorite reads!'];
 
-  // Pick a random greeting.
+  // Pick a fun fact.
   const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
