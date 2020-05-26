@@ -8,18 +8,18 @@
   margin-top: 20px;
 }
 
-h1 {
-    font-size: 70px;
+h1, h2 {
     color: white;
     font-family: 'Reenie Beanie', cursive;
+}
+
+h1 {
+    font-size: 70px;
 }
 
 h2 {
     font-size: 50px;
-    color: white;
-    font-family: 'Reenie Beanie', cursive;
 }
-
 .text-link {
     color: white;
     text-decoration: underline;
