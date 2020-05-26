@@ -19,13 +19,13 @@ labels = ["the summit of Mount Bierdstadt.",
 $(document).ready(function(){
     // if change background button is clicked, background image for the body is changed. 
     // Appropriate image label is displayed.
-  let index = 0;
+  let current_image_index = 0;
   $("#change-background").click(function(){
-      index++;
-      if (index == img_arr.length){
-        index = 0;
+      current_image_index++;
+      if (current_image_index == img_arr.length){
+        current_image_index = 0;
       }
-      $("body").css("background-image", "url(" + img_arr[index] + ")");
-      $("#background-caption").html("This image is of "+ labels[index]);
+      $("body").css("background-image", "url(" + img_arr[current_image_index] + ")");
+      $("#background-caption").html("This image is of "+ labels[current_image_index]);
   })
 });
