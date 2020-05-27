@@ -21,11 +21,9 @@ $(document).ready(function(){
     // Appropriate image label is displayed.
   let current_image_index = 0;
   $("#change-background").click(function(){
-      current_image_index++;
-      if (current_image_index == img_arr.length){
-        current_image_index = 0;
-      }
+      current_image_index = current_image_index % img_arr.length;
       $("body").css("background-image", "url(" + img_arr[current_image_index] + ")");
       $("#background-caption").html("This image is of "+ labels[current_image_index]);
+      current_image_index++;            
   })
 });
