@@ -1,5 +1,5 @@
 /*
-* Cycles between  different background images, triggered by mouse click
+* Purpose: contains various JQuery functions that listen for events on main portfolio page
 */
 
 let img_arr = new Array(5);
@@ -26,4 +26,13 @@ $(document).ready(function(){
       $("#background-caption").html("This image is of "+ labels[current_image_index]);
       current_image_index++;            
   })
+  // if mouse enters profile image attribute, change image to animated noogler.gif. Once mouse leaves,
+  // change back to normal profile icon
+   $(".profile").hover(function(){
+        $(".profile").attr("src", "images/noogler.gif")
+    },
+    function(){
+        $(".profile").attr("src", "images/zoebakercircle.png")
+    });
+
 });

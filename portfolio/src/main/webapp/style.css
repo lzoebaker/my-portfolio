@@ -56,7 +56,9 @@ body:before {
     border-radius: 50%;
     margin: 0px;
     padding: 0px;
+    object-fit: cover;
 }
+
 
 .transparent-button {
     background-color: grey;
