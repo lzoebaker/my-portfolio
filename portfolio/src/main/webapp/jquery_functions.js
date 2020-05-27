@@ -1,0 +1,29 @@
+/*
+* Cycles between  different background images, triggered by mouse click
+*/
+
+let img_arr = new Array(5);
+img_arr = ["../images/mountbierstadt.jpg", 
+           "../images/mountyale.jpg",
+           "../images/gardenofgods.jpg",
+           "../images/lakedillon.jpg",
+           "../images/mountelbert.jpg"
+           ];
+labels = ["the summit of Mount Bierdstadt.", 
+          "the summit of Mount Yale.", 
+          "the Garden of the Gods.", 
+          "Lake Dillon, seen from the vantage point of driving along Dillon Dam road.",
+          "the summit of Mount Elbert, the tallest point in Colorado."];
+
+
+$(document).ready(function(){
+    // if change background button is clicked, background image for the body is changed. 
+    // Appropriate image label is displayed.
+  let current_image_index = 0;
+  $("#change-background").click(function(){
+      current_image_index = current_image_index % img_arr.length;
+      $("body").css("background-image", "url(" + img_arr[current_image_index] + ")");
+      $("#background-caption").html("This image is of "+ labels[current_image_index]);
+      current_image_index++;            
+  })
+});

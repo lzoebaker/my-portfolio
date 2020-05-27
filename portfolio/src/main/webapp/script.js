@@ -13,16 +13,16 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+ * Adds a random fun fact to the page
+  */
+function displayFunFact(){
+  const facts =
+      ['I was born in Weehawken, New Jersey, and lived on a houseboat on the Hudson river!', 'I love the outdoors. My hobbies include trail running, hiking, skiing, camping, and climbing 14ers!', 'I like to wake up with the sun, and am a morning person. I love the quietness of 6am.', 'I really enjoy reading. Urban Fantasy, like the Dresden Files, are some of my favorite reads!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a fun fact.
+  const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const factContainer = document.getElementById('fact-container');
+  factContainer.innerText = fact;
 }
