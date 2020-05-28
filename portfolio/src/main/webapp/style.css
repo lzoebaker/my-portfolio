@@ -27,8 +27,10 @@ h2 {
 
 body {
     text-align: center;
-    background-image: url("../images/mountelbert.jpg");
-    background-size: cover;
+    background-size:cover; 
+    background-repeat:no-repeat;
+    background: url("images/background_sprites.png") -10px -10px;
+    background-attachment: fixed;
 }
 
 p {
