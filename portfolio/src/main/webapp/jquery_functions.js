@@ -2,30 +2,33 @@
 * Purpose: contains various JQuery functions that listen for events on main portfolio page
 */
 
-let img_arr = new Array(5);
-img_arr = ["../images/mountbierstadt.jpg", 
-           "../images/mountyale.jpg",
-           "../images/gardenofgods.jpg",
-           "../images/lakedillon.jpg",
-           "../images/mountelbert.jpg"
-           ];
-labels = ["the summit of Mount Bierdstadt.", 
-          "the summit of Mount Yale.", 
-          "the Garden of the Gods.", 
-          "Lake Dillon, seen from the vantage point of driving along Dillon Dam road.",
-          "the summit of Mount Elbert, the tallest point in Colorado."];
+import { update_background, NUM_IMAGES } from './background_functions.js';
+
+let profile_image_paths = ["images/noogler.gif", "images/zoebakercircle.png"];
 
 
+// Loads image paths into an arbitrary array, in order to preload images for improved performance.
+function preload_images(image_paths){
+  let image_arr = new Array(image_paths.length);
+  for (let i = 0; i < image_paths.length; i++) {
+    let temp_image = new Image(); 
+    temp_image.src = image_paths[i]; 
+    image_arr[i] = temp_image;
+  }
+  return image_arr;
+}
+
+let current_image_index = 1; // start on second image so as not to repeat landing image
 $(document).ready(function(){
-    // if change background button is clicked, background image for the body is changed. 
-    // Appropriate image label is displayed.
-  let current_image_index = 0;
+
+  let icon_images = preload_images(profile_image_paths);
+
+  // if change background button is clicked, background image for the body is changed.
   $("#change-background").click(function(){
-      current_image_index = current_image_index % img_arr.length;
-      $("body").css("background-image", "url(" + img_arr[current_image_index] + ")");
-      $("#background-caption").html("This image is of "+ labels[current_image_index]);
-      current_image_index++;            
-  })
+    update_background(current_image_index);
+    current_image_index = (current_image_index + 1) % NUM_IMAGES;
+  });
+
   // if mouse enters profile image attribute, change image to animated noogler.gif. Once mouse leaves,
   // change back to normal profile icon
    $(".profile").hover(function(){
