@@ -29,8 +29,19 @@ body {
     text-align: center;
     background-size:cover; 
     background-repeat:no-repeat;
-    background: url("images/background_sprites.png") -10px -10px;
+    background: url("images/background_sprites.png") -10px -200px;
     background-attachment: fixed;
+}
+
+@media only screen and (max-device-width: 600px) {
+  body {
+    background: url("images/mobilebackground.jpg");
+    background-size:cover;
+    background-repeat:no-repeat;
+  }
+  #change-background,  #background-image-description, #background-image-header{
+    display: none;
+  }
 }
 
 p {
