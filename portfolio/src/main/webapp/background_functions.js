@@ -7,7 +7,8 @@ export {updateBackground, NUM_IMAGES};
 const SPRITE_URL = "url('images/background_sprites.png')"
 const BACKGROUND_IMAGE_WIDTH = 2016;
 const BACKGROUND_IMAGE_HEIGHT = 1512;
-const VERT_PADDING = 40;
+const VERT_SHIFT = 200;
+const VERT_PADDING = 20;
 const HORZ_PADDING = 20;
 const SPRITE_IMAGE_ROWS = 2;
 const SPRITE_IMAGE_COLS = 3;
@@ -23,7 +24,7 @@ let labels = ["the summit of Mount Bierdstadt.",
 function getBackgroundPositionString(index){
   let row = Math.floor(index / SPRITE_IMAGE_COLS);
   let verticalOffset = BACKGROUND_IMAGE_HEIGHT * row
-  verticalOffset += (row+1) * VERT_PADDING;
+  verticalOffset += (row+1) * VERT_PADDING + VERT_SHIFT;
   let col = index % SPRITE_IMAGE_COLS
   let horizontalOffset = BACKGROUND_IMAGE_WIDTH * col
   horizontalOffset += (col+1) * HORZ_PADDING;
