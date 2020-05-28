@@ -2,7 +2,7 @@
 * Purpose: contains functions for changing the background 
 */
 
-export {update_background, NUM_IMAGES}; 
+export {updateBackground, NUM_IMAGES}; 
 
 const SPRITE_URL = "url('images/background_sprites.png')"
 const BACKGROUND_IMAGE_WIDTH = 2016;
@@ -20,27 +20,27 @@ let labels = ["the summit of Mount Bierdstadt.",
              "Lake Dillon, seen from the vantage point of driving along Dillon Dam road."];
 
 // returns css string corresponding to correct position of bacgkround image in sprite sheet
-function get_background_position_string(index){
+function getBackgroundPositionString(index){
   let row = Math.floor(index / SPRITE_IMAGE_COLS);
-  let vertical_offset = BACKGROUND_IMAGE_HEIGHT * row
-  vertical_offset += (row+1) * VERT_PADDING;
+  let verticalOffset = BACKGROUND_IMAGE_HEIGHT * row
+  verticalOffset += (row+1) * VERT_PADDING;
   let col = index % SPRITE_IMAGE_COLS
-  let horizontal_offset = BACKGROUND_IMAGE_WIDTH * col
-  horizontal_offset += (col+1) * HORZ_PADDING;
+  let horizontalOffset = BACKGROUND_IMAGE_WIDTH * col
+  horizontalOffset += (col+1) * HORZ_PADDING;
     
-  return SPRITE_URL + " -" + horizontal_offset.toString()+ "px -" + vertical_offset.toString() +"px";
+  return SPRITE_URL + " -" + horizontalOffset.toString()+ "px -" + verticalOffset.toString() +"px";
 }
 
 // given a css position string, updates css attributes to display background
-function update_background_css(background_position_string){
-  $("body").css("background", background_position_string);
+function updateBackgroundCss(backgroundPositionString){
+  $("body").css("background", backgroundPositionString);
   $("body").css("background-attachment", "fixed");
 }
 
 // driver function, called by jquer_functions.js
-function update_background(index){
-  let position_string = get_background_position_string(index);
-  update_background_css(position_string);
+function updateBackground(index){
+  let positionString = getBackgroundPositionString(index);
+  updateBackgroundCss(positionString);
   // appropriate label displayed
   $("#background-caption").html("This image is of "+ labels[index]);
 }
