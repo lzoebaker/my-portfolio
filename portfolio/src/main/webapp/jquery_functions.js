@@ -10,15 +10,46 @@ const SPRITE_IMG_ROWS = 2;
 const SPRITE_IMG_COLS = 3;
 const NUM_IMAGES = 5;
 
+<<<<<<< HEAD
+=======
+let background_img_paths = new Array(5);
+background_img_paths = ["../images/mountbierstadt.jpg", 
+                        "../images/mountyale.jpg",
+                        "../images/gardenofgods.jpg",
+                        "../images/lakedillon.jpg",
+                        "../images/mountelbert.jpg"
+                       ];
+profile_img_paths = ["images/noogler.gif",
+                     "images/zoebakercircle.png"
+                    ];
+>>>>>>> 96604ff35f9509c05df55b0e587c426e7c234724
 labels = ["the summit of Mount Bierdstadt.", 
           "the summit of Mount Yale.", 
           "the summit of Mount Elbert, the tallest point in Colorado.",
           "the Garden of the Gods.", 
+<<<<<<< HEAD
           "Lake Dillon, seen from the vantage point of driving along Dillon Dam road."];
 
 $(document).ready(function(){
     // if change background button is clicked, background image for the body is changed.
     // each background image corresponds to a pixel location in a larger sprite image.  
+=======
+          "Lake Dillon, seen from the vantage point of driving along Dillon Dam road.",
+          "the summit of Mount Elbert, the tallest point in Colorado."];
+
+function preload_imgs(img_arr, img_paths){
+  for (let i = 0; i < img_paths.length; i++) {
+      img_arr[i] = new Image();
+      img_arr[i].src = img_paths[i];
+  }
+}
+
+$(document).ready(function(){
+    // preload all images to speedup image transitions
+  let all_image_paths = background_img_paths.concat(profile_img_paths)
+  preload_imgs(new Array(all_image_paths.length), all_image_paths)
+
+    // if change background button is clicked, background image for the body is changed. 
     // Appropriate image label is displayed.
   let current_image_index = 1; // start on second image so as not to repeat landing image
   $("#change-background").click(function(){
