@@ -1,15 +1,16 @@
 package com.google.sps.data;
+import java.time.Instant;
 
 /** Class to store data associated with each value left on page */
 public final class Comment {
   private String author;
   private String value;
-  private long timestamp;
+  private Long timestamp;
 
   public Comment(String author, String value) {
     this.author = author;
     this.value = value;
-    this.timestamp = System.currentTimeMillis();
+    this.timestamp = Instant.now().toEpochMilli();
   }
 
   public String getAuthor() {
@@ -20,7 +21,7 @@ public final class Comment {
     return value;
   }
 
-  public long getTimestamp(){
+  public long getTimestamp() {
     return timestamp;
   }
 }
