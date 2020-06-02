@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
 
+/* purpose: to manage the interface of the Datastore database used to store comments */
 public final class CommentDatabase {
   public static final String COMMENT_FIELD = "Comment";
   public static final String AUTHOR_FIELD = "author";
