@@ -27,9 +27,9 @@ h2 {
 
 body {
     text-align: center;
-    background-size:cover; 
-    background-repeat:no-repeat;
     background: url("images/background_sprites.png") -10px -200px;
+    background-size:300vw auto; 
+    background-repeat:no-repeat;
     background-attachment: fixed;
 }
 
@@ -44,7 +44,7 @@ body {
   }
 }
 
-p {
+p, label[for=author], label[for=value] {
     color: white;
     font-family: 'Open Sans', sans-serif;
     font-size: 20px;
@@ -94,7 +94,7 @@ body:before {
 	top:1px;
 }
 
-.fact-text {
+.fact-text, #comments-container {
     padding: 30px 0 0 0;
     color: white;
     font-family: 'Open Sans', sans-serif;

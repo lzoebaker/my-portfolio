@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Comments</title>
+      <script src = "comments.js" type="text/javascript"> </script>
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Reenie+Beanie&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style.css">
+  </head>
+  <body onload="getComment()">
+      <h2> Comments </h2>
+      <p> Leave me a comment here: </p>
+      <form action="/comments" method="POST">
+          <label for="author">Name:</label><br>
+          <input type="text" name="author" required><br>
+          <label for="value">Comment:</label><br>
+          <input type="text" name="value" required><br>
+          <input type="submit" value="Submit!" class="transparent-button">
+      </form>
+      <div id = "comments-container"></div>
+  </body>
