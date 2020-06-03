@@ -32,8 +32,8 @@ public final class CommentDatabase {
   private void getCommentsFromQuery() {
     PreparedQuery storedCommentsQuery = datastore.prepare(COMMENT_QUERY);
     this.comments = StreamSupport.stream(storedCommentsQuery.asIterable().spliterator(),  /*sequential execution*/ false)
-                                 .map(entity -> new Comment((String) entity.getProperty(AUTHOR_QUERY_STRING), 
-                                                       (String) entity.getProperty(VALUE_QUERY_STRING)))
+                                 .map(entity -> new Comment(entity.getProperty(AUTHOR_QUERY_STRING).toString(), 
+                                                            entity.getProperty(VALUE_QUERY_STRING).toString()))
                                  .collect(Collectors.toCollection(ArrayList::new));
   }
 
