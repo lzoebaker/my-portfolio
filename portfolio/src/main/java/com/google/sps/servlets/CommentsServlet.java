@@ -52,8 +52,8 @@ public class CommentsServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the comments form
     try {
-      String authorText = getParameter(request, commentDatabase.AUTHOR_FIELD);
-      String valueText = getParameter(request, commentDatabase.VALUE_FIELD);
+      String authorText = getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
+      String valueText = getParameter(request, commentDatabase.VALUE_QUERY_STRING);
       Comment comment = new Comment(authorText, valueText);
       commentDatabase.putCommentInDatabase(comment);   
     } catch (RuntimeException e){ 
