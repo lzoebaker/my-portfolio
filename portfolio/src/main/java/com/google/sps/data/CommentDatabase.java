@@ -6,6 +6,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 /* purpose: to manage the interface of the Datastore database used to store comments */
 public final class CommentDatabase {
@@ -13,7 +15,7 @@ public final class CommentDatabase {
   public static final String AUTHOR_QUERY_STRING = "author";
   public static final String VALUE_QUERY_STRING = "value";
   public static final String TIME_QUERY_STRING = "timestamp";
-  private static final Query COMMENT_QUERY = new Query(COMMENT_QUERY_STRING).addSort(TIME_QUERY_STRING, SortDirection.ASCENDING);
+  private static final Query COMMENT_QUERY = new Query(COMMENT_QUERY_STRING).addSort(TIME_QUERY_STRING, SortDirection.DESCENDING);
   DatastoreService datastore;
   private ArrayList<Comment> comments;
 
@@ -24,17 +26,25 @@ public final class CommentDatabase {
   /* public wrappper method to return all comments from datastore as an arraylist */
   public ArrayList<Comment> getCommentsAsArrayList(){
     this.getCommentsFromQuery();
+    // sort so that comments are displayed from oldest to newest
     return this.comments;
   }
 
   private void getCommentsFromQuery() {
     PreparedQuery storedCommentsQuery = datastore.prepare(COMMENT_QUERY);
-    this.comments = new ArrayList<Comment>();
-    for (Entity entity : storedCommentsQuery.asIterable()) {
-      Comment comment = new Comment((String) entity.getProperty(AUTHOR_QUERY_STRING), (String) entity.getProperty(VALUE_QUERY_STRING));
-      this.comments.add(comment);
-    }  
+    // grab maxCommentsToDisplay newest comments
+    this.comments = 
+        StreamSupport
+            .stream(storedCommentsQuery.asIterable().spliterator(),  /*sequential execution*/ false)
+            .map(this::commentFromEntity)
+            .collect(Collectors.toCollection(ArrayList::new));
   }
+
+  private Comment commentFromEntity(Entity entity){
+      return new Comment(
+                 entity.getProperty(AUTHOR_QUERY_STRING).toString(), 
+                 entity.getProperty(VALUE_QUERY_STRING).toString());
+  } 
 
   public void putCommentInDatabase(Comment comment) {
       Entity commentEntity = getDatastoreEntityFromComment(comment);
