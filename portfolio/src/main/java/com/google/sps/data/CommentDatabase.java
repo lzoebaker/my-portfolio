@@ -6,6 +6,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 /* purpose: to manage the interface of the Datastore database used to store comments */
 public final class CommentDatabase {
@@ -29,11 +31,10 @@ public final class CommentDatabase {
 
   private void getCommentsFromQuery() {
     PreparedQuery storedCommentsQuery = datastore.prepare(COMMENT_QUERY);
-    this.comments = new ArrayList<Comment>();
-    for (Entity entity : storedCommentsQuery.asIterable()) {
-      Comment comment = new Comment((String) entity.getProperty(AUTHOR_QUERY_STRING), (String) entity.getProperty(VALUE_QUERY_STRING));
-      this.comments.add(comment);
-    }  
+    this.comments = StreamSupport.stream(storedCommentsQuery.asIterable().spliterator(),  /*sequential execution*/ false)
+                                 .map(entity -> new Comment((String) entity.getProperty(AUTHOR_QUERY_STRING), 
+                                                       (String) entity.getProperty(VALUE_QUERY_STRING)))
+                                 .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public void putCommentInDatabase(Comment comment) {
