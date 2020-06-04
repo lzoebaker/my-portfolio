@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.sps.data.Comment;
 import com.google.sps.data.CommentDatabase;
+import com.google.sps.servlets.ParameterGetter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,11 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // if max comments submit button clicked, get input from max comments form 
-    if (getParameter(request,  MAX_FORM_SUBMIT) != "") {
+    if (!ParameterGetter.getParameter(request,  MAX_FORM_SUBMIT).isEmpty()) {
       handleMaxCommentRequest(request);
     }
     // if comment submit button clicked, get author and value from comments form
-    if (getParameter(request, COMMENT_FORM_SUBMIT) != "") {
+    if (!ParameterGetter.getParameter(request, COMMENT_FORM_SUBMIT).isEmpty()) {
       handleCommentFormRequest(request);
     }
     // redirect back to comments page
@@ -82,8 +83,8 @@ public class CommentsServlet extends HttpServlet {
 
   private void handleCommentFormRequest(HttpServletRequest request) {
     try {
-        String authorText = getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
-        String valueText = getParameter(request, commentDatabase.VALUE_QUERY_STRING);
+        String authorText = ParameterGetter.getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
+        String valueText = ParameterGetter.getParameter(request, commentDatabase.VALUE_QUERY_STRING);
         Comment comment = new Comment(authorText, valueText);
         commentDatabase.putCommentInDatabase(comment);   
       } catch (RuntimeException e) { 
@@ -91,18 +92,9 @@ public class CommentsServlet extends HttpServlet {
         System.out.println("Comment entered is not a valid value.");
       }
   }
-   
-  /* wrapper for the servlet request method, with safety default value*/
-  private String getParameter(HttpServletRequest request, String name) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return "";
-    }
-    return value;
-  }
 
   private void setMaxCommentsToDisplay(HttpServletRequest request) throws IllegalArgumentException {
-    String maxCommentsToDisplayString = getParameter(request, MAX_COMMENTS_QUERY_STRING);
+    String maxCommentsToDisplayString = ParameterGetter.getParameter(request, MAX_COMMENTS_QUERY_STRING);
     // Convert the input to an int.
     try {
         maxCommentsToDisplay = Integer.parseInt(maxCommentsToDisplayString);
