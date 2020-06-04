@@ -59,7 +59,8 @@ public final class CommentDatabase {
 
   private Entity getDatastoreEntityFromComment(Comment comment) throws RuntimeException {
     // store the comments in a datastore
-    Entity commentEntity = new Entity(COMMENT_QUERY_STRING);
+    String key = comment.getAuthor() + comment.getValue();
+    Entity commentEntity = new Entity(COMMENT_QUERY_STRING, key);
     commentEntity.setProperty(AUTHOR_QUERY_STRING, comment.getAuthor());
     commentEntity.setProperty(VALUE_QUERY_STRING, comment.getValue());
     commentEntity.setProperty(TIME_QUERY_STRING, comment.getTimestamp());
