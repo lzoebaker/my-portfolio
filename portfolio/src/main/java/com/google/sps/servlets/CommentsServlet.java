@@ -31,22 +31,23 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentsServlet extends HttpServlet {
   private static final String JSON_CONTENT_TYPE = "application/json;";
   private static final String COMMENTS_PAGE_URL = "/comments-page.html";
-  private static final int MAX_COMMENT_DEFAULT = 20;
+  private static final String MAX_COMMENTS_QUERY_STRING = "max-comments";
+  private static final String COMMENT_FORM_SUBMIT = "comment-submit";
+  private static final String MAX_FORM_SUBMIT = "max-comment-submit";
+  private static final int MAX_COMMENT_DEFAULT = 5;
+  int maxCommentsToDisplay;
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   CommentDatabase commentDatabase = new CommentDatabase(datastore);
+
+  @Override
+   public void init() {
+     maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
+   }
 
   /* responds with a JSON string containing authors and comments*/
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Query datastore for all comments
-    int maxComments = MAX_COMMENT_DEFAULT;
-    try {
-        maxComments = getMaxCommentsToDisplay(request);
-    } catch (IllegalArgumentException e) {
-        maxComments = MAX_COMMENT_DEFAULT;
-        System.out.println(e.getMessage());
-    } 
-    ArrayList<Comment> comments = commentDatabase.getComments(maxComments);
+    ArrayList<Comment> comments = commentDatabase.getComments(maxCommentsToDisplay);
     // Convert the ArrayLists to JSON
     Gson gson = new Gson();
     String commentsJson = gson.toJson(comments);
@@ -54,22 +55,41 @@ public class CommentsServlet extends HttpServlet {
     response.setContentType(JSON_CONTENT_TYPE);
     response.getWriter().println(commentsJson);
   }
-
-  /* when the submit button on the values page is hit, doPost requests the text in the author and commment field and stores them*/ 
+  
+  /* responds to comments and max comment limit set by user */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the comments form
-    try {
-      String authorText = getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
-      String valueText = getParameter(request, commentDatabase.VALUE_QUERY_STRING);
-      Comment comment = new Comment(authorText, valueText);
-      commentDatabase.putCommentInDatabase(comment);   
-    } catch (RuntimeException e){ 
-        e.printStackTrace();
-        System.out.println("Comment entered is not a valid value.");
+    // if max comments submit button clicked, get input from max comments form 
+    if (getParameter(request,  MAX_FORM_SUBMIT) != "") {
+      handleMaxCommentRequest(request);
+    }
+    // if comment submit button clicked, get author and value from comments form
+    if (getParameter(request, COMMENT_FORM_SUBMIT) != "") {
+      handleCommentFormRequest(request);
     }
     // redirect back to comments page
     response.sendRedirect(COMMENTS_PAGE_URL);
+  }
+
+  private void handleMaxCommentRequest(HttpServletRequest request) {
+    try {
+        setMaxCommentsToDisplay(request);
+      } catch (IllegalArgumentException e) {
+        maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
+        System.out.println(e.getMessage());
+      } 
+  }
+
+  private void handleCommentFormRequest(HttpServletRequest request) {
+    try {
+        String authorText = getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
+        String valueText = getParameter(request, commentDatabase.VALUE_QUERY_STRING);
+        Comment comment = new Comment(authorText, valueText);
+        commentDatabase.putCommentInDatabase(comment);   
+      } catch (RuntimeException e) { 
+        e.printStackTrace();
+        System.out.println("Comment entered is not a valid value.");
+      }
   }
    
   /* wrapper for the servlet request method, with safety default value*/
@@ -81,21 +101,18 @@ public class CommentsServlet extends HttpServlet {
     return value;
   }
 
-  private int getMaxCommentsToDisplay(HttpServletRequest request) throws IllegalArgumentException {
-    String maxCommentsToDisplayString = "3"; //temporary hardcoded value, will get replaced with user input
-
+  private void setMaxCommentsToDisplay(HttpServletRequest request) throws IllegalArgumentException {
+    String maxCommentsToDisplayString = getParameter(request, MAX_COMMENTS_QUERY_STRING);
     // Convert the input to an int.
-    int maxCommentsToDisplay;
     try {
         maxCommentsToDisplay = Integer.parseInt(maxCommentsToDisplayString);
     } catch (NumberFormatException e) {
-        throw new NumberFormatException("Max comments cannot be converted to string: " + maxCommentsToDisplayString);
+        throw new NumberFormatException("Max comments cannot be converted to int: " + maxCommentsToDisplayString);
     }
     // Check that the input is greater than 0
     if (maxCommentsToDisplay < 0) {
       throw new IllegalArgumentException("Max comments to display cannot be negative: " + maxCommentsToDisplayString);
-    }
-    return maxCommentsToDisplay;
+  } 
   }
   
 }

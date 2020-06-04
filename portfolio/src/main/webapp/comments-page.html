@@ -14,7 +14,12 @@
           <input type="text" name="author" required><br>
           <label for="value">Comment:</label><br>
           <input type="text" name="value" required><br>
-          <input type="submit" value="Submit!" class="transparent-button">
+          <input type="submit" name = "comment-submit" value="Submit!" class="transparent-button">
+      </form>
+      <p> How many comments do you want displayed? </p>
+      <form action="/comments" method="POST">
+          <input type="number" name="max-comments" min="0" max="100" required><br>
+          <input type="submit" name = "max-comment-submit" value="Submit!" class="transparent-button">
       </form>
       <div id = "comments-container"></div>
   </body>
