@@ -5,9 +5,11 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import java.util.ArrayList;
 import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
+import java.util.Collections;
 
 /* purpose: to manage the interface of the Datastore database used to store comments */
 public final class CommentDatabase {
@@ -24,23 +26,27 @@ public final class CommentDatabase {
   }
 
   /* public wrappper method to return all comments from datastore as an arraylist */
-  public ArrayList<Comment> getCommentsAsArrayList(){
-    this.getCommentsFromQuery();
-    // sort so that comments are displayed from oldest to newest
+  public ArrayList<Comment> getComments(int maxCommentsToDisplay) {
+    this.queryForComments(maxCommentsToDisplay);
+    // reverse so that comments are displayed from oldest to newest
+    Collections.reverse(this.comments);
     return this.comments;
   }
 
-  private void getCommentsFromQuery() {
+  private void queryForComments(int maxCommentsToDisplay) {
     PreparedQuery storedCommentsQuery = datastore.prepare(COMMENT_QUERY);
     // grab maxCommentsToDisplay newest comments
     this.comments = 
         StreamSupport
-            .stream(storedCommentsQuery.asIterable().spliterator(),  /*sequential execution*/ false)
+            .stream(
+                storedCommentsQuery.asIterable(
+                    FetchOptions.Builder.withLimit(maxCommentsToDisplay)).spliterator(),  
+                    /*sequential execution*/ false)
             .map(this::commentFromEntity)
             .collect(Collectors.toCollection(ArrayList::new));
   }
 
-  private Comment commentFromEntity(Entity entity){
+  private Comment commentFromEntity(Entity entity) {
       return new Comment(
                  entity.getProperty(AUTHOR_QUERY_STRING).toString(), 
                  entity.getProperty(VALUE_QUERY_STRING).toString());

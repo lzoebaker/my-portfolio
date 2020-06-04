@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentsServlet extends HttpServlet {
   private static final String JSON_CONTENT_TYPE = "application/json;";
   private static final String COMMENTS_PAGE_URL = "/comments-page.html";
+  private static final int MAX_COMMENT_DEFAULT = 20;
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   CommentDatabase commentDatabase = new CommentDatabase(datastore);
 
@@ -38,7 +39,14 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Query datastore for all comments
-    ArrayList<Comment> comments = commentDatabase.getCommentsAsArrayList();
+    int maxComments = MAX_COMMENT_DEFAULT;
+    try {
+        maxComments = getMaxCommentsToDisplay(request);
+    } catch (IllegalArgumentException e) {
+        maxComments = MAX_COMMENT_DEFAULT;
+        System.out.println(e.getMessage());
+    } 
+    ArrayList<Comment> comments = commentDatabase.getComments(maxComments);
     // Convert the ArrayLists to JSON
     Gson gson = new Gson();
     String commentsJson = gson.toJson(comments);
@@ -72,4 +80,22 @@ public class CommentsServlet extends HttpServlet {
     }
     return value;
   }
+
+  private int getMaxCommentsToDisplay(HttpServletRequest request) throws IllegalArgumentException {
+    String maxCommentsToDisplayString = "3"; //temporary hardcoded value, will get replaced with user input
+
+    // Convert the input to an int.
+    int maxCommentsToDisplay;
+    try {
+        maxCommentsToDisplay = Integer.parseInt(maxCommentsToDisplayString);
+    } catch (NumberFormatException e) {
+        throw new NumberFormatException("Max comments cannot be converted to string: " + maxCommentsToDisplayString);
+    }
+    // Check that the input is greater than 0
+    if (maxCommentsToDisplay < 0) {
+      throw new IllegalArgumentException("Max comments to display cannot be negative: " + maxCommentsToDisplayString);
+    }
+    return maxCommentsToDisplay;
+  }
+  
 }
