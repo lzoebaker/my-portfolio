@@ -61,7 +61,7 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // if max comments submit button clicked, get input from max comments form 
-    if (!ParameterGetter.getParameter(request,  MAX_FORM_SUBMIT).isEmpty()) {
+    if (!ParameterGetter.getParameter(request, MAX_FORM_SUBMIT).isEmpty()) {
       handleMaxCommentRequest(request);
     }
     // if comment submit button clicked, get author and value from comments form
