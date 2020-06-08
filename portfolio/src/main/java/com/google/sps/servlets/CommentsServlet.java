@@ -35,7 +35,7 @@ public class CommentsServlet extends HttpServlet {
   private static final String MAX_COMMENTS_QUERY_STRING = "max-comments";
   private static final String COMMENT_FORM_SUBMIT = "comment-submit";
   private static final String MAX_FORM_SUBMIT = "max-comment-submit";
-  private static final int MAX_COMMENT_DEFAULT = 5;
+  private static final int MAX_COMMENT_DEFAULT = 12;
   int maxCommentsToDisplay;
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   CommentDatabase commentDatabase = new CommentDatabase(datastore);

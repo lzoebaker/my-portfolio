@@ -12,14 +12,14 @@
       <p> Leave me a comment here: </p>
       <form action="/comments" method="POST">
           <label for="author">Name:</label><br>
-          <input type="text" name="author" required><br>
+          <input type="text" name="author" maxlength="20" required><br>
           <label for="value">Comment:</label><br>
-          <input type="text" name="value" required><br>
+          <input type="text" name="value" maxlength="50" required><br>
           <input type="submit" name="comment-submit" value="Submit!" class="transparent-button">
       </form>
-      <p> How many comments do you want displayed? </p>
+      <p> How many comments do you want displayed? (Max: 12) </p>
       <form action="/comments" method="POST">
-          <input type="number" name="max-comments" min="0" max="100" required><br>
+          <input type="number" name="max-comments" min="0" max="12" required><br>
           <input type="submit" name="max-comment-submit" value="Submit!" class="transparent-button">
       </form>
       <div id = "comments-container"></div>

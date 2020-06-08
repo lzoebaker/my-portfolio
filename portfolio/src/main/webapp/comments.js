@@ -28,43 +28,49 @@ function addCommentsToDom(commentList) {
 function createCommentAndDeleteButton(author, value) {
   const commentWrapper = document.createElement('div');
   commentWrapper.classList.add('comment_div');
-  const commentElement = createComment(author, value);
-  commentWrapper.appendChild(commentElement);
-  commentWrapper.appendChild(createDeleteButton(commentElement));
-  $('.comment_div li, .comment_div button').css('display', 'inline-block');
+  const commentText = createCommentText(author, value);
+  commentWrapper.appendChild(commentText);
+  commentWrapper.appendChild(createDeleteButton(commentText));
+  $('.comment_div p, .comment_div button').css('display', 'inline-block');
   return commentWrapper;
 }
 
-/** Creates an <li> element containing author: comment.*/
-function createComment(author, value) {
-  const liElement = document.createElement('li');
-  liElement.innerText = author + ": " + value;
-  return liElement;
+function createCommentText(author, value) {
+  const commentText = document.createElement('p');
+  commentText.classList.add('comment-text');
+  commentText.innerText = author + ": " + value;
+  return commentText;
 }
 
 /** Creates a delete button linked to the deletion of each comment */
-function createDeleteButton(commentElement) {
+function createDeleteButton(commentText) {
   const deleteButton = document.createElement('form');
   deleteButton.action = '/delete-comment';
   deleteButton.method = 'GET';
   deleteButton.appendChild(createSubmitButton());
-  deleteButton.appendChild(createKeyValueField(commentElement));
+  deleteButton.appendChild(createKeyValueField(commentText));
   return deleteButton;
 }
 
 /** creates the submit button that triggers sending the "author:value" text of comment*/
 function createSubmitButton() {
   const submitButton = document.createElement('input');
+  submitButton.classList.add('delete-button');
   submitButton.type = 'submit';
   submitButton.value = 'delete';
+  submitButton.onclick = removeCommentDiv(this);
   return submitButton;
 }
 
+function removeCommentDiv(elem){
+      $(elem).closest('div').remove();
+}
+
 /** sets the value to be sent as "author:value", which is used to identify comment for deletion */
-function createKeyValueField(commentElement) {
+function createKeyValueField(commentText) {
   const keyValueOfComment = document.createElement('input');
   keyValueOfComment.type = 'hidden';
-  keyValueOfComment.value = commentElement.innerText;
+  keyValueOfComment.value = commentText.innerText;
   keyValueOfComment.name = 'key-value';
   return keyValueOfComment;
 }

@@ -94,7 +94,7 @@ body:before {
 	top:1px;
 }
 
-.fact-text, #comments-container {
+.fact-text {
     padding: 30px 0 0 0;
     color: white;
     font-family: 'Open Sans', sans-serif;
@@ -108,4 +108,36 @@ body:before {
     width: 500px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#comments-container {
+    display: grid;
+    padding: 50px 15px 25px 100px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 0px;
+    background-size: 95vw auto;
+    align-content: center;
+    background-image: url("images/bulletin_board.png");
+    background-repeat: no-repeat;
+}
+
+.comment_div {
+    background-size: 300px;
+    width: 300px;
+    height: 300px;
+    padding: 15px;
+    background-image: url("images/sticky_note_yellow.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    flex-wrap: wrap;
+}
+
+.comment-text {
+    align-self: center;
+    font-size: 30px;
+    color: black;
+    font-family: 'Reenie Beanie', cursive;
+    max-width: 170px;
 }
