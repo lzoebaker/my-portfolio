@@ -16,7 +16,7 @@ function handleResponse(response) {
 function changeDom(authenticationInfo) {
     if (authenticationInfo.isLoggedIn) {
       // TODO: replace with better front end design 
-      document.body.innerHTML += ("<p>Hello " + authenticationInfo.userEmail + "!</p>");
+      document.body.innerHTML += ("<p>Hello " + authenticationInfo.displayName + "!</p>");
       document.body.innerHTML += ("<p>Logout <a href=\"" + authenticationInfo.authenticationUrl + "\">here</a>.</p>");
     } else {
       document.body.innerHTML += ("<p>You must login to comment.</p>");
