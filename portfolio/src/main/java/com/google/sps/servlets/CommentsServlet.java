@@ -13,8 +13,11 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.sps.data.UserDatabase;
 import com.google.sps.data.Comment;
 import com.google.sps.data.CommentDatabase;
 import com.google.sps.servlets.ParameterGetter;
@@ -36,9 +39,11 @@ public class CommentsServlet extends HttpServlet {
   private static final String COMMENT_FORM_SUBMIT = "comment-submit";
   private static final String MAX_FORM_SUBMIT = "max-comment-submit";
   private static final int MAX_COMMENT_DEFAULT = 12;
-  int maxCommentsToDisplay;
-  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  CommentDatabase commentDatabase = new CommentDatabase(datastore);
+  private int maxCommentsToDisplay;
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final UserService userService = UserServiceFactory.getUserService(); 
+  private final CommentDatabase commentDatabase = new CommentDatabase(this.datastore);
+  private final UserDatabase userDatabase = new UserDatabase(this.datastore);
 
   @Override
    public void init() {
@@ -48,7 +53,7 @@ public class CommentsServlet extends HttpServlet {
   /* responds with a JSON string containing authors and comments*/
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<Comment> comments = commentDatabase.getComments(maxCommentsToDisplay);
+    ArrayList<Comment> comments = this.commentDatabase.getComments(this.maxCommentsToDisplay);
     // Convert the ArrayLists to JSON
     Gson gson = new Gson();
     String commentsJson = gson.toJson(comments);
@@ -76,33 +81,34 @@ public class CommentsServlet extends HttpServlet {
     try {
         setMaxCommentsToDisplay(request);
       } catch (IllegalArgumentException e) {
-        maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
+        this.maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
         System.out.println(e.getMessage());
       } 
   }
 
   private void handleCommentFormRequest(HttpServletRequest request) {
     try {
-        String authorText = ParameterGetter.getParameter(request, commentDatabase.AUTHOR_QUERY_STRING);
-        String valueText = ParameterGetter.getParameter(request, commentDatabase.VALUE_QUERY_STRING);
+        String userId = userService.getCurrentUser().getUserId();
+        String authorText = this.userDatabase.getDisplayName(userId);
+        String valueText = ParameterGetter.getParameter(request, this.commentDatabase.VALUE_QUERY_STRING);
         Comment comment = new Comment(authorText, valueText);
-        commentDatabase.putCommentInDatabase(comment);   
-      } catch (RuntimeException e) { 
+        this.commentDatabase.putCommentInDatabase(comment);   
+    } catch (RuntimeException e) { 
         e.printStackTrace();
         System.out.println("Comment entered is not a valid value.");
-      }
+    }
   }
 
   private void setMaxCommentsToDisplay(HttpServletRequest request) throws IllegalArgumentException {
     String maxCommentsToDisplayString = ParameterGetter.getParameter(request, MAX_COMMENTS_QUERY_STRING);
     // Convert the input to an int.
     try {
-        maxCommentsToDisplay = Integer.parseInt(maxCommentsToDisplayString);
+        this.maxCommentsToDisplay = Integer.parseInt(maxCommentsToDisplayString);
     } catch (NumberFormatException e) {
         throw new NumberFormatException("Max comments cannot be converted to int: " + maxCommentsToDisplayString);
     }
     // Check that the input is greater than 0
-    if (maxCommentsToDisplay < 0) {
+    if (this.maxCommentsToDisplay < 0) {
       throw new IllegalArgumentException("Max comments to display cannot be negative: " + maxCommentsToDisplayString);
   } 
   }

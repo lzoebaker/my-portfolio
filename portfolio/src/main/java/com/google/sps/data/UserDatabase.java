@@ -3,12 +3,14 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.DatastoreService;
+import com.google.common.base.Strings;
 
 public final class UserDatabase {
   private DatastoreService datastore;
   private static final String DISPLAY_NAME_QUERY_STRING = "display-name";
   private static final String USER_ENTITY_QUERY_STRING = "UserInfo";
   private static final String ID_QUERY_STRING = "id";
+  private static final String DEFAULT_DISPLAY_NAME = "anonymous";
 
   public UserDatabase(DatastoreService datastore) {
     this.datastore = datastore;
@@ -27,6 +29,9 @@ public final class UserDatabase {
   }
 
   public void setDisplayName(String userId, String displayName) {
+    if (Strings.isNullOrEmpty(displayName)) {
+      displayName = DEFAULT_DISPLAY_NAME;
+    }
     Entity entity = createUserEntity(userId, displayName);
     this.datastore.put(entity);
   }

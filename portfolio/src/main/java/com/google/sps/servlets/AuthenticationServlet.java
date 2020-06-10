@@ -17,8 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login") 
 public class AuthenticationServlet extends HttpServlet {
   private final static String DISPLAY_NAME_URL = "/displayname.html";
-  // TODO: change to actual logoff redirection page
-  private final static String REDIRECT_LOGOFF_URL = "/login.html";
+  private final static String REDIRECT_LOGOFF_URL = "/comments-page.html";
   private final static String JSON_CONTENT_TYPE = "application/json";
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final UserService userService = UserServiceFactory.getUserService(); 
@@ -52,9 +51,8 @@ public class AuthenticationServlet extends HttpServlet {
     String userEmail = userService.getCurrentUser().getEmail();
     String userId = userService.getCurrentUser().getUserId();
     String displayName = userDatabase.getDisplayName(userId);
-    // if displayName is not set, set to be email address 
     if (displayName == null || displayName.isEmpty()){
-        displayName = userEmail;
+        displayName = "";
     }
     String url = userService.createLogoutURL(REDIRECT_LOGOFF_URL);
     return new UserAuthentication(isUserLoggedIn, userEmail, displayName, url);   

@@ -15,7 +15,6 @@ function handleResponse(response) {
 /* Adds log in/ log out options to html page. */
 function changeDom(authenticationInfo) {
     if (authenticationInfo.isLoggedIn) {
-      // TODO: replace with better front end design 
       document.body.innerHTML += ("<p>Hello " + authenticationInfo.displayName + "!</p>");
       document.body.innerHTML += ("<p>Logout <a href=\"" + authenticationInfo.authenticationUrl + "\">here</a>.</p>");
     } else {

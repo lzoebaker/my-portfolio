@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/display-name")
 public class DisplayNameServlet extends HttpServlet {
   private static final String DISPLAY_NAME_QUERY_STRING = "name";
-  // TODO: change to route to comments page, instead of just login for testing
   private static final String COMMENTS_PAGE_URL = "/comments-page.html";
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final UserDatabase userDatabase = new UserDatabase(this.datastore);
