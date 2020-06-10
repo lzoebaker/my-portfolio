@@ -1,8 +1,11 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.UserAuthentication;
+import com.google.sps.data.UserDatabase;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -13,27 +16,48 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that handles user authentication, so that users must log in to post comments */
 @WebServlet("/login") 
 public class AuthenticationServlet extends HttpServlet {
-  //TODO: change to actual redirect page. currently just redirects to test logoff
-  private final static String REDIRECT_URL = "/login.html"; 
-  private static final String JSON_CONTENT_TYPE = "application/json;";
+  private final static String DISPLAY_NAME_URL = "/displayname.html";
+  // TODO: change to actual logoff redirection page
+  private final static String REDIRECT_LOGOFF_URL = "/login.html";
+  private final static String JSON_CONTENT_TYPE = "application/json";
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final UserService userService = UserServiceFactory.getUserService(); 
+  private final UserDatabase userDatabase = new UserDatabase(datastore);
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-    Boolean isUserLoggedIn = userService.isUserLoggedIn();
-    String userEmail;
-    String url;
+    boolean isUserLoggedIn = userService.isUserLoggedIn();
+    UserAuthentication userAuthentication;
+
     if (isUserLoggedIn) {
-        userEmail = userService.getCurrentUser().getEmail();
-        url = userService.createLogoutURL(REDIRECT_URL);
+        userAuthentication = processLoggedInUser(userService);
     } else {
-        userEmail = "";
-        url = userService.createLoginURL(REDIRECT_URL);
+        userAuthentication = processNotLoggedInUser(userService);
     }
-    UserAuthentication userAuthentication = new UserAuthentication(isUserLoggedIn, userEmail, url);
+
     Gson gson = new Gson();
     String userAuthenticationInfoJSON = gson.toJson(userAuthentication); 
     response.setContentType(JSON_CONTENT_TYPE);
     response.getWriter().println(userAuthenticationInfoJSON);
   }
+
+  private UserAuthentication processNotLoggedInUser(UserService userService) {
+    boolean isUserLoggedIn = false;
+    String url = userService.createLoginURL(DISPLAY_NAME_URL);
+    return new UserAuthentication(isUserLoggedIn, "", "", url);
+  }
+  
+  private UserAuthentication processLoggedInUser(UserService userService) {
+    boolean isUserLoggedIn = true;
+    String userEmail = userService.getCurrentUser().getEmail();
+    String userId = userService.getCurrentUser().getUserId();
+    String displayName = userDatabase.getDisplayName(userId);
+    // if displayName is not set, set to be email address 
+    if (displayName == null || displayName.isEmpty()){
+        displayName = userEmail;
+    }
+    String url = userService.createLogoutURL(REDIRECT_LOGOFF_URL);
+    return new UserAuthentication(isUserLoggedIn, userEmail, displayName, url);   
+  } 
+
 }
