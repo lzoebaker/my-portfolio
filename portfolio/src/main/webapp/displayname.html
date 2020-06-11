@@ -7,10 +7,11 @@
       <link rel="stylesheet" href="style.css">
   </head>
   <body>
-      <h2> Enter in a display name! </h2>
+      <h2> Enter in a display name!</h2>
+      <p> If you leave the form blank, your name will default to "anonymous". </p>
        <form action="/display-name" method="POST">
           <label><p>Name:</p></label><br>
-          <input type="text" name="name" maxlength="20" required><br>
+          <input type="text" name="name" maxlength="20"><br>
           <input type="submit" value="Submit!" class="transparent-button">
         </form>
   </body>

@@ -7,16 +7,18 @@
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Reenie+Beanie&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="style.css">
   </head>
-  <body onload="getComment()">
+  <body onload="loadCommentPage()">
+      <p> To leave a comment, you must be logged in. </p>
+      <a href="login.html" class="transparent-button">Log in/ Log out</a> </p>
       <h2> Comments </h2>
+      <div id="comment-form">
       <p> Leave me a comment here: </p>
       <form action="/comments" method="POST">
-          <label for="author">Name:</label><br>
-          <input type="text" name="author" maxlength="20" required><br>
           <label for="value">Comment:</label><br>
           <input type="text" name="value" maxlength="50" required><br>
           <input type="submit" name="comment-submit" value="Submit!" class="transparent-button">
       </form>
+      </div>
       <p> How many comments do you want displayed? (Max: 12) </p>
       <form action="/comments" method="POST">
           <input type="number" name="max-comments" min="0" max="12" required><br>

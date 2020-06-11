@@ -1,15 +1,18 @@
 /*
-* Purpose: recieves HTTP promise response from CommentsServlet.java, places authors and comments into appropriate html container 
+* Purpose: recieves HTTP promise response from Comments servlet, UserAuthentication servlet, modifies comments page accordingly
 */
+
+function loadCommentPage(){
+    getUserAuthentication();
+    getComment();
+}
 
 function getComment() {
     const responsePromise = fetch('/comments');
-    // when server request complete, pass response into handleResponse
-    responsePromise.then(handleResponse);
+    responsePromise.then(handleCommentResponse);
 }
 
-function handleResponse(response) {
-    // receives Java Object (ArrayList reponse)
+function handleCommentResponse(response) {
     const commentListPromise = response.json();
     commentListPromise.then(addCommentsToDom);
 }
@@ -73,4 +76,23 @@ function createKeyValueField(commentText) {
   keyValueOfComment.value = commentText.innerText;
   keyValueOfComment.name = 'key-value';
   return keyValueOfComment;
+}
+
+function getUserAuthentication() {
+    const responsePromise = fetch('/login');
+    responsePromise.then(handleAuthenticationResponse);
+}
+
+function handleAuthenticationResponse(response) {
+    const authenticationInfoJSON = response.json();
+    authenticationInfoJSON.then(changeAuthenticationDom);
+}
+
+function changeAuthenticationDom(authenticationInfo) {
+    if (authenticationInfo.isLoggedIn) {
+      document.getElementById('comment-form').hidden = false;
+    } 
+    else {
+      document.getElementById('comment-form').hidden = true;
+    }
 }
