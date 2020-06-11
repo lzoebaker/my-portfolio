@@ -14,9 +14,7 @@
 
 package com.google.sps.servlets;
 import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.sps.data.UserDatabase;
 import com.google.sps.data.Comment;
 import com.google.sps.data.CommentDatabase;
@@ -31,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that handles comments data */
-@WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
   private static final String JSON_CONTENT_TYPE = "application/json;";
   private static final String COMMENTS_PAGE_URL = "/comments-page.html";
@@ -40,14 +37,18 @@ public class CommentsServlet extends HttpServlet {
   private static final String MAX_FORM_SUBMIT = "max-comment-submit";
   private static final int MAX_COMMENT_DEFAULT = 12;
   private int maxCommentsToDisplay;
-  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final UserService userService = UserServiceFactory.getUserService(); 
-  private final CommentDatabase commentDatabase = new CommentDatabase(this.datastore);
-  private final UserDatabase userDatabase = new UserDatabase(this.datastore);
+  private final CommentDatabase commentDatabase;
+  private final UserDatabase userDatabase;
+  private final DatastoreService datastore;
+  private final UserService userService;
 
-  @Override
-   public void init() {
-     maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
+  public CommentsServlet(DatastoreService datastore, UserService userService, 
+      CommentDatabase commentDatabase, UserDatabase userDatabase) {
+    maxCommentsToDisplay = MAX_COMMENT_DEFAULT;
+    this.datastore = datastore;
+    this.userService = userService;
+    this.commentDatabase = commentDatabase;
+    this.userDatabase = userDatabase;
    }
 
   /* responds with a JSON string containing authors and comments*/

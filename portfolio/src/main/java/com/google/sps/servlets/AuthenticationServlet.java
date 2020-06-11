@@ -13,15 +13,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that handles user authentication, so that users must log in to post comments */
-@WebServlet("/login") 
+/** Servlet that handles user authentication, so that users must log in to post comments */ 
 public class AuthenticationServlet extends HttpServlet {
   private final static String DISPLAY_NAME_URL = "/displayname.html";
   private final static String REDIRECT_LOGOFF_URL = "/comments-page.html";
   private final static String JSON_CONTENT_TYPE = "application/json";
-  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final UserService userService = UserServiceFactory.getUserService(); 
-  private final UserDatabase userDatabase = new UserDatabase(datastore);
+  private final DatastoreService datastore;
+  private final UserService userService;
+  private final UserDatabase userDatabase;
+
+  public AuthenticationServlet(DatastoreService datastore, UserService userService, UserDatabase userDatabase) {
+     this.datastore = datastore;
+     this.userService = userService;
+     this.userDatabase = userDatabase;
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
