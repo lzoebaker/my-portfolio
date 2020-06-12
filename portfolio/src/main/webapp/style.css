@@ -141,3 +141,9 @@ body:before {
     font-family: 'Reenie Beanie', cursive;
     max-width: 170px;
 }
+
+#map {
+    margin: auto;
+    height: 40vw;
+    width: 40vw;
+}
