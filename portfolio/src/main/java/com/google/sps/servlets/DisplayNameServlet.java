@@ -14,18 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /* Servlet that allows user to set their display name, updates datastore */
+@WebServlet("/display-name")
 public class DisplayNameServlet extends HttpServlet {
   private static final String DISPLAY_NAME_QUERY_STRING = "name";
   private static final String COMMENTS_PAGE_URL = "/comments-page.html";
-  private final DatastoreService datastore;
-  private final UserDatabase userDatabase;
-  private final UserService userService;
-
-  public DisplayNameServlet(DatastoreService datastore, UserService userService, UserDatabase userDatabase) {
-     this.datastore = datastore;
-     this.userService = userService;
-     this.userDatabase = userDatabase;
-   }
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final UserDatabase userDatabase = new UserDatabase(this.datastore);
+  private final UserService userService = UserServiceFactory.getUserService();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
